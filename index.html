@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김재호 Jaeho KIM — 영상 PD · AI 콘텐츠 크리에이터</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --border: #E8E8E5;
+  --text: #1A1A1A;
+  --muted: #6B7280;
+  --accent: #2F55A8;
+  --accent-light: #EEF2FF;
+  --accent2: #0F766E;
+  --accent2-light: #CCFBF1;
+  --gold: #B45309;
+  --gold-light: #FEF3C7;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover: 0 4px 20px rgba(0,0,0,.12);
+}
+
+body {
+  font-family: -apple-system, 'Segoe UI', Helvetica, Arial, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* ── 상단 고정 헤더 ── */
+.top-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+}
+.top-bar-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.top-bar-nav { display: flex; gap: 6px; }
+.top-bar-nav a {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  padding: 5px 10px; border-radius: 6px; transition: all .15s;
+}
+.top-bar-nav a:hover { background: var(--bg); color: var(--text); }
+.top-bar-cta {
+  background: var(--accent); color: #fff;
+  font-size: 12px; font-weight: 700;
+  padding: 7px 16px; border-radius: 8px;
+  text-decoration: none; white-space: nowrap;
+  transition: opacity .15s;
+}
+.top-bar-cta:hover { opacity: .88; }
+
+/* ── 공통 레이아웃 ── */
+.page { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* ── 히어로 섹션 ── */
+.hero {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 48px 48px 40px;
+  margin: 32px 0 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #2F55A8, #0F766E, #B45309);
+}
+.hero-top { display: flex; align-items: flex-start; gap: 32px; }
+.hero-photo {
+  width: 88px; height: 88px; border-radius: 14px;
+  background: linear-gradient(135deg, #2F55A8 0%, #0F766E 100%);
+  flex-shrink: 0; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+.hero-info { flex: 1; }
+.hero-name { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
+.hero-name span { color: var(--accent); }
+.hero-title {
+  font-size: 15px; color: var(--muted); font-weight: 500; margin-bottom: 14px;
+}
+.hero-contacts { display: flex; gap: 10px; flex-wrap: wrap; }
+.contact-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--muted); font-weight: 600;
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 5px 12px; border-radius: 20px;
+  text-decoration: none; transition: all .15s;
+}
+.contact-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 주요 수치 배너 */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-top: 32px; padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.stat-item { text-align: center; }
+.stat-num { font-size: 26px; font-weight: 900; color: var(--accent); line-height: 1; }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 600; letter-spacing: .3px; }
+
+/* 핵심 한 줄 소개 */
+.hero-summary {
+  margin-top: 24px;
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  font-size: 14px; color: #1E3A8A; line-height: 1.7; font-weight: 500;
+}
+
+/* ── 섹션 공통 ── */
+.section { margin-bottom: 16px; }
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.section-header {
+  padding: 20px 24px 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-icon { font-size: 18px; }
+.section-title { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+.section-body { padding: 16px 24px 24px; }
+
+/* ── 역량 카드 그리드 ── */
+.comp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.comp-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.comp-card-title {
+  font-size: 13px; font-weight: 800; color: var(--text);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.comp-card ul { list-style: none; }
+.comp-card ul li {
+  font-size: 12.5px; color: #374151; line-height: 1.65;
+  padding: 2px 0;
+  padding-left: 14px; position: relative;
+}
+.comp-card ul li::before {
+  content: '·'; position: absolute; left: 0;
+  color: var(--accent); font-weight: 900;
+}
+.comp-card.ai { border-color: #A7F3D0; background: #F0FDF9; }
+.comp-card.ai .comp-card-title { color: var(--accent2); }
+.comp-card.ai ul li::before { color: var(--accent2); }
+
+/* ── 기술 배지 ── */
+.skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 700;
+  padding: 6px 12px; border-radius: 6px;
+  border: 1px solid transparent;
+}
+.skill-badge.cam   { background: #EEF2FF; color: #3730A3; border-color: #C7D2FE; }
+.skill-badge.edit  { background: #FFF7ED; color: #9A3412; border-color: #FED7AA; }
+.skill-badge.ai    { background: #F0FDF9; color: #065F46; border-color: #A7F3D0; }
+.skill-badge.live  { background: #FDF4FF; color: #6B21A8; border-color: #E9D5FF; }
+.skill-badge.other { background: #F9FAFB; color: #374151; border-color: #E5E7EB; }
+
+/* ── 경력 타임라인 ── */
+.timeline { position: relative; padding-left: 20px; }
+.timeline::before {
+  content: '';
+  position: absolute; left: 6px; top: 6px; bottom: 6px;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 22px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-dot {
+  position: absolute; left: -17px; top: 5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tl-dot.gold { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+.tl-dot.teal { background: var(--accent2); box-shadow: 0 0 0 2px var(--accent2); }
+.tl-org {
+  font-size: 10px; font-weight: 800; letter-spacing: .5px;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 3px;
+}
+.tl-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.tl-desc { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.55; }
+.tl-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px; margin-top: 5px;
+}
+.tl-badge.award { background: var(--gold-light); color: var(--gold); }
+.tl-badge.edu   { background: var(--accent-light); color: var(--accent); }
+.tl-badge.ai    { background: var(--accent2-light); color: var(--accent2); }
+
+/* ── 학력 / 자격증 ── */
+.edu-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.edu-row:last-child { border-bottom: none; }
+.edu-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--accent-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.edu-name { font-size: 14px; font-weight: 700; }
+.edu-dept { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.cert-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.cert-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: var(--gold);
+  background: var(--gold-light); border: 1px solid #FDE68A;
+  padding: 6px 12px; border-radius: 6px;
+}
+
+/* ── 포트폴리오 그리드 ── */
+.pf-filter { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.pf-btn {
+  font-size: 12px; font-weight: 700; padding: 5px 12px;
+  border-radius: 6px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--muted);
+  cursor: pointer; transition: all .15s;
+}
+.pf-btn.active, .pf-btn:hover {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.pf-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.pf-card {
+  position: relative; border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform .2s, box-shadow .2s;
+  text-decoration: none;
+  display: block;
+}
+.pf-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.pf-thumb {
+  aspect-ratio: 16/9;
+  background: #1A1A2E;
+  position: relative; overflow: hidden;
+}
+.pf-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .3s;
+}
+.pf-card:hover .pf-thumb img { transform: scale(1.04); }
+.pf-play {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(0,0,0,.65);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 13px;
+  opacity: 0; transition: opacity .2s;
+}
+.pf-card:hover .pf-play { opacity: 1; }
+.pf-label {
+  padding: 8px 10px; background: var(--surface);
+}
+.pf-role {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px; margin-bottom: 4px;
+}
+.pf-role.plan    { background: var(--accent-light); color: var(--accent); }
+.pf-role.shoot   { background: #FFF7ED; color: #9A3412; }
+.pf-role.solo    { background: var(--accent2-light); color: var(--accent2); }
+.pf-role.ai      { background: #FDF4FF; color: #6B21A8; }
+.pf-role.company { background: #EDE9FE; color: #5B21B6; }
+
+/* AI 포트폴리오 */
+.ai-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.ai-card {
+  border: 1px solid #A7F3D0; border-radius: 8px; overflow: hidden;
+  background: #F0FDF9; text-decoration: none; display: block;
+  transition: transform .2s, box-shadow .2s;
+}
+.ai-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.ai-thumb { aspect-ratio: 9/16; background: #0F172A; overflow: hidden; position: relative; }
+.ai-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.ai-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,.65);
+  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px;
+  opacity: 0; transition: opacity .2s;
+}
+.ai-card:hover .ai-play { opacity: 1; }
+.ai-label { padding: 8px 10px; }
+.ai-tag { font-size: 10px; font-weight: 700; color: var(--accent2); background: var(--accent2-light); padding: 2px 7px; border-radius: 4px; display: inline-block; margin-bottom: 4px; }
+
+/* 숨김 클래스 */
+.pf-card.hidden { display: none; }
+
+/* ── 반응형 ── */
+@media (max-width: 600px) {
+  .page { padding: 0 12px 60px; }
+  .hero { padding: 28px 20px 24px; }
+  .hero-top { flex-direction: column; gap: 16px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .comp-grid { grid-template-columns: 1fr; }
+  .pf-grid, .ai-grid { grid-template-columns: repeat(2, 1fr); }
+  .top-bar { padding: 0 16px; }
+  .top-bar-nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── 상단 고정 바 ── -->
+<div class="top-bar">
+  <div class="top-bar-name">김재호 Jaeho KIM</div>
+  <nav class="top-bar-nav">
+    <a href="#competency">역량</a>
+    <a href="#career">경력</a>
+    <a href="#portfolio">포트폴리오</a>
+    <a href="#ai-portfolio">AI 작업물</a>
+  </nav>
+  <a class="top-bar-cta" href="mailto:freekino@naver.com">✉ 연락하기</a>
+</div>
+
+<div class="page">
+
+  <!-- ── 히어로 ── -->
+  <div class="hero" id="top">
+    <div class="hero-top">
+      <div class="hero-photo"><img src="profile.png" alt="김재호 프로필"></div>
+      <div class="hero-info">
+        <div class="hero-name">김재호 <span>Jaeho KIM</span></div>
+        <div class="hero-title">영상 프로듀서(PD) · AI 콘텐츠 크리에이터 · 대학 겸임교수</div>
+        <div class="hero-contacts">
+          <a class="contact-chip" href="mailto:freekino@naver.com">📧 freekino@naver.com</a>
+          <a class="contact-chip" href="tel:01098622236">📞 010-9862-2236</a>
+          <a class="contact-chip" href="https://vvd.bz/Czx" target="_blank">🔗 포트폴리오 링크</a>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-light);border:1px solid #C7D2FE;padding:5px 12px;border-radius:20px;">🏛 서강대학교 영상대학원 디지털문화콘텐츠 전공 (M.F.A)</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#374151;background:#F3F4F6;border:1px solid #E5E7EB;padding:5px 12px;border-radius:20px;">🎬 우석대학교 연극영화과 학사 · 영화촬영전공</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--gold);background:var(--gold-light);border:1px solid #FDE68A;padding:5px 12px;border-radius:20px;">🤿 Underwater Videography Diver</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--gold);background:var(--gold-light);border:1px solid #FDE68A;padding:5px 12px;border-radius:20px;">🌊 Open Water Diver</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--gold);background:var(--gold-light);border:1px solid #FDE68A;padding:5px 12px;border-radius:20px;">✈️ 4종 무인멀티콥터 조종</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">15<span style="font-size:16px">년+</span></div>
+        <div class="stat-label">영상 PD 경력</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" style="font-size:20px;">기획·연출</div>
+        <div class="stat-label">부산엑스포 · 관광공사<br>웹예능 · 기업홍보 총괄</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" style="font-size:20px;">마케팅</div>
+        <div class="stat-label">브랜디드 콘텐츠<br>홍보 영상 기획 제작</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">AI</div>
+        <div class="stat-label">생성형 AI 기반<br>하이브리드 제작</div>
+      </div>
+    </div>
+
+    <div class="hero-summary">
+      🎯 <strong>기획부터 촬영·편집·송출까지 엔드투엔드 프로덕션을 단독 수행</strong>하는 15년 경력의 영상 PD입니다.
+      방송 연출 · 기업 홍보 영상 · VR 콘텐츠에 이어, 최근에는
+      <strong>생성형 AI 기반 하이브리드 제작 체계</strong>를 구축해 속도와 품질 두 가지를 모두 갖춘 콘텐츠를 제공합니다.
+    </div>
+  </div>
+
+  <!-- ── 핵심 역량 ── -->
+  <div class="section" id="competency">
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📌</span>
+        <span class="section-title">핵심 역량</span>
+      </div>
+      <div class="section-body">
+        <div class="comp-grid">
+
+          <div class="comp-card">
+            <div class="comp-card-title">🎬 영상 기획 및 제작</div>
+            <ul>
+              <li>15년+ 영상 프로듀서(PD) 경력</li>
+              <li>기획 → 촬영 → 편집 → 송출 엔드투엔드 수행</li>
+              <li>스토리텔링 중심 콘텐츠 기획력 보유</li>
+              <li>내레이션 스크립트 작성 및 캐스팅 경험</li>
+            </ul>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-card-title">📡 방송 · 미디어 콘텐츠</div>
+            <ul>
+              <li>방송 · 온라인 영상 · 브랜디드 콘텐츠 제작</li>
+              <li>인포테인먼트, 버라이어티 포맷 강점</li>
+              <li>VR·360° 콘텐츠 · 숏폼 제작 다수</li>
+              <li>국가기관·기업 홍보 영상 총괄 다수</li>
+            </ul>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-card-title">🏢 프로젝트 관리</div>
+            <ul>
+              <li>영상 제작팀 총괄 및 크루 디렉팅</li>
+              <li>기업·기관 대형 프로젝트 납기 관리</li>
+              <li>예산 계획 및 스케줄 조율 경험</li>
+              <li>대학 겸임교수 — 전문 지식 체계화</li>
+            </ul>
+          </div>
+
+          <div class="comp-card ai">
+            <div class="comp-card-title">🤖 AI 기반 영상 제작 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;padding:1px 6px;border-radius:4px;margin-left:4px;">NEW</span></div>
+            <ul>
+              <li>생성형 AI 영상 콘텐츠 기획 및 제작</li>
+              <li>AI 실사화 영상 · TTS · 음성 클로닝</li>
+              <li>AI 이미지 → 영상화 프로세스 설계</li>
+              <li>촬영+AI 병행 <strong>하이브리드 제작 구조</strong> 구축</li>
+            </ul>
+          </div>
+
+          <div class="comp-card" style="border-color:#FDE68A;background:#FFFBEB;grid-column:1/-1;">
+            <div class="comp-card-title" style="color:#92400E;">⚡ 바이브코딩 기반 비즈니스 기획 <span style="font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;padding:1px 6px;border-radius:4px;margin-left:4px;">NEW</span></div>
+            <ul style="columns:2;gap:24px;">
+              <li>AI 코딩 툴을 활용한 앱·웹 서비스 <strong>목업 기획 및 프로토타이핑</strong></li>
+              <li>비즈니스 아이템 기획부터 작동 가능한 데모까지 <strong>1인 제작</strong></li>
+              <li>마이밍(MyMing) — 리워드 앱 서비스 기획 및 인터랙티브 목업 구현</li>
+              <li>스핀오프 아이템 발굴 및 서비스 확장 기획</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 기술 역량 ── -->
+  <div class="section">
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">🎥</span>
+        <span class="section-title">기술 역량</span>
+      </div>
+      <div class="section-body">
+        <div class="skills-wrap">
+          <span class="skill-badge cam">📷 DSLR · 시네마 카메라 · 4K</span>
+          <span class="skill-badge cam">🚁 드론 항공촬영</span>
+          <span class="skill-badge cam">🥽 VR · 360° 영상</span>
+          <span class="skill-badge edit">🎞 Premiere Pro</span>
+          <span class="skill-badge edit">✂️ Final Cut Pro</span>
+          <span class="skill-badge edit">✨ After Effects</span>
+          <span class="skill-badge edit">🎨 Photoshop</span>
+          <span class="skill-badge" style="background:#FFFBEB;color:#92400E;border-color:#FDE68A;">⚡ 바이브코딩 (Vibe Coding)</span>
+          <span class="skill-badge" style="background:#FFFBEB;color:#92400E;border-color:#FDE68A;">📱 앱·웹 목업 기획</span>
+          <span class="skill-badge ai">🤖 AI 프롬프트 엔지니어링</span>
+          <span class="skill-badge ai">🗣 AI TTS · 음성 클로닝</span>
+          <span class="skill-badge ai">🖼 AI 이미지 생성</span>
+          <span class="skill-badge live">📡 스튜디오 · LIVE 스트리밍 운영</span>
+          <span class="skill-badge other">🤿 수중 촬영 (다이버 자격)</span>
+          <span class="skill-badge other">✈️ 무인멀티콥터 4종 조종</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 주요 경력 ── -->
+  <div class="section" id="career">
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📂</span>
+        <span class="section-title">주요 경력</span>
+      </div>
+      <div class="section-body">
+        <div class="timeline">
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org" style="color:#92400E;">⚡ 바이브코딩 · 서비스 기획</div>
+            <div class="tl-title">마이밍(MyMing) — 리워드 앱 서비스 기획 및 인터랙티브 목업 구현</div>
+            <div class="tl-desc">AI 코딩 툴(바이브코딩) 기반으로 앱·웹 서비스 목업을 직접 구현 — 모래시계 리워드 시스템, 교환소, 오퍼월 등 전체 UX 기획 및 프로토타이핑 1인 제작</div>
+            <span class="tl-badge" style="background:#FEF3C7;color:#92400E;">⚡ 바이브코딩</span>
+            <span class="tl-badge" style="background:#FEF3C7;color:#92400E;margin-left:4px;">📱 스핀오프 아이템 기획</span>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#7C3AED;"></div>
+            <div class="tl-org" style="color:#5B21B6;">🏢 피앤더블유에이티</div>
+            <div class="tl-title">종합 광고대행 · AI 콘텐츠 제작 총괄 PD</div>
+            <div class="tl-desc">디지털 마케팅, 영상 제작, AI 멀티플랫폼 콘텐츠 제작 전문 — 선거관리위원회·SBSBiz·보험연구원·NH골프·청년도약계좌 등 기업·공공기관 납품 다수 / AI 영상(응샘이야·먹스테이션·쇼앤뉴스 등) 기획·제작 총괄</div>
+            <span class="tl-badge" style="background:#EDE9FE;color:#5B21B6;">🎥 영상 기획·제작</span>
+            <span class="tl-badge" style="background:#D1FAE5;color:#065F46;margin-left:4px;">🤖 AI 영상 제작</span>
+            <span class="tl-badge" style="background:#FEF3C7;color:#92400E;margin-left:4px;">📡 멀티플랫폼 콘텐츠</span>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">국가기관 · 공공</div>
+            <div class="tl-title">2030 부산엑스포 유치 홍보 콘텐츠 — 웹예능 기획·제작 총괄</div>
+            <div class="tl-desc">X4엔터테인먼트 | 엑스포 유치를 위한 웹예능 포맷 기획부터 최종 납품까지 총괄</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">KFN 국방TV</div>
+            <div class="tl-title">「지구영웅전」 10회 연출 및 종합 편집</div>
+            <div class="tl-desc">버라이어티 포맷 10부작 — 연출, 현장 지휘, 종합 편집 전담</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">KFN 국방TV</div>
+            <div class="tl-title">「여행에진심」 종합 감독 및 촬영</div>
+            <div class="tl-desc">여행 버라이어티 프로그램 종합 감독 · 현장 촬영 총괄</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">한국관광공사</div>
+            <div class="tl-title">MICE 컨벤션 VR 홍보 영상 기획·제작</div>
+            <div class="tl-desc">VR·360° 기술 기반 공사 공식 홍보 콘텐츠 기획 및 제작</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot gold"></div>
+            <div class="tl-org">독립영화 · 영화제</div>
+            <div class="tl-title">독립영화 「Into Focus」 촬영감독</div>
+            <div class="tl-desc">제9회 아시아나국제단편영화제 출품작</div>
+            <span class="tl-badge award">🏆 최우수 국내작품상 수상</span>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">MBC</div>
+            <div class="tl-title">드라마 조명팀 참여</div>
+            <div class="tl-desc">「12월의 열대야」 「내사랑 팥쥐」 「MBC베스트극장」 등 다수 드라마 조명팀</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">웹드라마</div>
+            <div class="tl-title">웹드라마 「아른」 연출 및 제작</div>
+            <div class="tl-desc">네이버TV 배포 — 기획, 연출, 제작 총괄 (CoreeSoundsTV)</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot teal"></div>
+            <div class="tl-org">한국영상대학교</div>
+            <div class="tl-title">영상촬영조명과 겸임교수</div>
+            <div class="tl-desc">담당 과목: 특수촬영, 영화 콘티, 촬영 기초</div>
+            <span class="tl-badge edu">🎓 대학교수</span>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot teal"></div>
+            <div class="tl-org">상지대학교</div>
+            <div class="tl-title">문화콘텐츠학과 겸임교수</div>
+            <div class="tl-desc">담당 과목: 영상제작기획, 뉴미디어, 게임·모바일 콘텐츠</div>
+            <span class="tl-badge edu">🎓 대학교수</span>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot teal"></div>
+            <div class="tl-org">문화예술진흥원</div>
+            <div class="tl-title">영화 파트 예술강사 활동</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-org">기타 주요 이력</div>
+            <div class="tl-title">798LAND CONCEPT STORE · 비디오플러스 · CTS TV · 창업</div>
+            <div class="tl-desc">제품 영상 기획 · 영상기기 얼리테스터 객원기자 · ENG 카메라팀 · (주)드팔레트 창립</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 영상 포트폴리오 ── -->
+  <div class="section" id="portfolio">
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">▶️</span>
+        <span class="section-title">영상 포트폴리오</span>
+      </div>
+      <div class="section-body">
+        <div class="pf-filter">
+          <button class="pf-btn active" onclick="filterPF(this,'all')">전체</button>
+          <button class="pf-btn" onclick="filterPF(this,'plan')">기획·제작 총괄</button>
+          <button class="pf-btn" onclick="filterPF(this,'shoot')">촬영·편집</button>
+          <button class="pf-btn" onclick="filterPF(this,'solo')">1인 제작</button>
+          <button class="pf-btn" onclick="filterPF(this,'company')">피앤더블유에이티</button>
+        </div>
+        <div class="pf-grid" id="pfGrid">
+
+          <!-- 기획 및 제작 총괄 -->
+          <a class="pf-card plan" href="https://youtu.be/kmcNL4EbTDc" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/kmcNL4EbTDc/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card shoot" href="https://www.youtube.com/watch?v=LLNJKFPaYGQ" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/LLNJKFPaYGQ/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">촬영·종합편집</span></div>
+          </a>
+
+          <a class="pf-card shoot" href="https://youtu.be/LGYsHTB_9j8" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/LGYsHTB_9j8/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">촬영·종합편집</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/YvAAIx8K1is" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/YvAAIx8K1is/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://www.youtube.com/watch?v=f-8Z13DQUfk" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/f-8Z13DQUfk/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/UTRF5n4C1qo" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/UTRF5n4C1qo/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/FCeCUwXSNZY" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/FCeCUwXSNZY/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/MUi0JSxRhiw" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/MUi0JSxRhiw/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/hwdLdA3bnx8" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/hwdLdA3bnx8/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/xXTg9rPRNYk" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/xXTg9rPRNYk/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·연출</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/KQl7Crpgwbg" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/KQl7Crpgwbg/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/zwlGu43v5Co" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/zwlGu43v5Co/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/syK0_DInWKM" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/syK0_DInWKM/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/JXt6t6YThIc" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/JXt6t6YThIc/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/Ly9VHk0cMWQ" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/Ly9VHk0cMWQ/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card shoot" href="https://youtu.be/CK46ARh0Khw" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/CK46ARh0Khw/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">촬영</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/N5A3UMejvXY" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/N5A3UMejvXY/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/I9MaDaq9w3g" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/I9MaDaq9w3g/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/RhivG7Un9a4" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/RhivG7Un9a4/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/8q3rQDmGeTg" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/8q3rQDmGeTg/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/G9zWgNg9Zwg" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/G9zWgNg9Zwg/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/vwMHYdpftAs" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/vwMHYdpftAs/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/S0ebRD3QjjA" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/S0ebRD3QjjA/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/fJXleq4jl2Q" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/fJXleq4jl2Q/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/xm7dMvWQyCg" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/xm7dMvWQyCg/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/O6H8WO97NB4" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/O6H8WO97NB4/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <a class="pf-card solo" href="https://youtu.be/mVx-D-Lc_pY" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/mVx-D-Lc_pY/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role solo">1인 제작</span></div>
+          </a>
+
+          <a class="pf-card shoot" href="https://youtu.be/9gkcla589mM" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/9gkcla589mM/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">편집</span></div>
+          </a>
+
+          <a class="pf-card plan" href="https://youtu.be/gcKTHhzn9vo" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/gcKTHhzn9vo/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">기획·제작 총괄</span></div>
+          </a>
+
+          <!-- ── 피앤더블유에이티 영상 ── -->
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=pNaO0_UiVjU&t=391s" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/pNaO0_UiVjU/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">편집</span></div>
+          </a>
+
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=kqKnsdAlzMU" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/kqKnsdAlzMU/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">종편</span></div>
+          </a>
+
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=VhoHruHKFVo" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/VhoHruHKFVo/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role shoot">촬영총괄</span></div>
+          </a>
+
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=B3M4B0_1QXc" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/B3M4B0_1QXc/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">제작</span></div>
+          </a>
+
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=0rOjifaZiaA" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/0rOjifaZiaA/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">행사총괄 및 방송제작</span></div>
+          </a>
+
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=iqjbB-we9Lw" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/iqjbB-we9Lw/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">제작</span></div>
+          </a>
+
+          <a class="pf-card company" href="https://www.youtube.com/watch?v=b6CxdbxXwy4" target="_blank">
+            <div class="pf-thumb"><img src="https://img.youtube.com/vi/b6CxdbxXwy4/mqdefault.jpg" alt="" loading="lazy"><div class="pf-play">▶</div></div>
+            <div class="pf-label"><span class="pf-role plan">제작</span></div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AI 포트폴리오 ── -->
+  <div class="section" id="ai-portfolio">
+    <div class="section-card" style="border-color:#A7F3D0;">
+      <div class="section-header" style="background:#F0FDF9;">
+        <span class="section-icon">🤖</span>
+        <span class="section-title" style="color:#065F46;">AI 제작 포트폴리오</span>
+        <span style="font-size:11px;font-weight:700;background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:4px;margin-left:6px;">생성형 AI 활용</span>
+      </div>
+      <div class="section-body" style="background:#F0FDF9;">
+        <div class="ai-grid">
+
+          <a class="ai-card" href="https://www.youtube.com/watch?v=2f9LI-_yBBo" target="_blank">
+            <div class="ai-thumb" style="aspect-ratio:16/9;"><img src="https://img.youtube.com/vi/2f9LI-_yBBo/mqdefault.jpg" alt="" loading="lazy"><div class="ai-play">▶</div></div>
+            <div class="ai-label"><span class="ai-tag">AI 기획</span></div>
+          </a>
+
+          <a class="ai-card" href="https://www.youtube.com/watch?v=8zhxfHgAhLM" target="_blank">
+            <div class="ai-thumb" style="aspect-ratio:16/9;"><img src="https://img.youtube.com/vi/8zhxfHgAhLM/mqdefault.jpg" alt="" loading="lazy"><div class="ai-play">▶</div></div>
+            <div class="ai-label"><span class="ai-tag">AI 미디어월 기획</span></div>
+          </a>
+
+          <a class="ai-card" href="https://www.youtube.com/watch?v=h47pEZtRnNE&t=200s" target="_blank">
+            <div class="ai-thumb" style="aspect-ratio:16/9;"><img src="https://img.youtube.com/vi/h47pEZtRnNE/mqdefault.jpg" alt="" loading="lazy"><div class="ai-play">▶</div></div>
+            <div class="ai-label"><span class="ai-tag">AI 제작</span></div>
+          </a>
+
+          <a class="ai-card" href="https://youtube.com/shorts/mIL5puKyhlM" target="_blank">
+            <div class="ai-thumb"><img src="https://img.youtube.com/vi/mIL5puKyhlM/mqdefault.jpg" alt="" loading="lazy"><div class="ai-play">▶</div></div>
+            <div class="ai-label"><span class="ai-tag">AI 생성 콘텐츠</span></div>
+          </a>
+
+          <a class="ai-card" href="https://youtube.com/shorts/X1HpsueTSaQ" target="_blank">
+            <div class="ai-thumb"><img src="https://img.youtube.com/vi/X1HpsueTSaQ/mqdefault.jpg" alt="" loading="lazy"><div class="ai-play">▶</div></div>
+            <div class="ai-label"><span class="ai-tag">AI 뉴스 콘텐츠 샘플</span></div>
+          </a>
+
+          <a class="ai-card" href="https://youtube.com/shorts/NCo23Od2w7k" target="_blank">
+            <div class="ai-thumb"><img src="https://img.youtube.com/vi/NCo23Od2w7k/mqdefault.jpg" alt="" loading="lazy"><div class="ai-play">▶</div></div>
+            <div class="ai-label"><span class="ai-tag">AI 뉴스 콘텐츠 샘플</span></div>
+          </a>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 연락처 CTA ── -->
+  <div style="background:var(--accent);border-radius:var(--radius);padding:36px;text-align:center;color:#fff;margin-top:8px;">
+    <div style="font-size:20px;font-weight:900;margin-bottom:8px;">함께 만들어가고 싶은 콘텐츠가 있으신가요?</div>
+    <div style="font-size:14px;opacity:.85;margin-bottom:24px;">기획부터 최종 납품까지 책임지고 함께하겠습니다.</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="mailto:freekino@naver.com" style="background:#fff;color:var(--accent);font-weight:800;font-size:14px;padding:12px 28px;border-radius:8px;text-decoration:none;">📧 이메일 보내기</a>
+      <a href="tel:01098622236" style="background:rgba(255,255,255,.15);color:#fff;font-weight:800;font-size:14px;padding:12px 28px;border-radius:8px;text-decoration:none;border:1px solid rgba(255,255,255,.3);">📞 010-9862-2236</a>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function filterPF(btn, type) {
+  document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.pf-card').forEach(card => {
+    if (type === 'all') {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.toggle('hidden', !card.classList.contains(type));
+    }
+  });
+}
+</script>
+
+</body>
+</html>
